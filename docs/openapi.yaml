@@ -1,0 +1,692 @@
+openapi: 3.0.3
+info:
+  title: Somfy TaHoma local API
+  version: "1.0"
+servers:
+  - url: https://gateway-{pin}.local:{port}/enduser-mobile-web/1/enduserAPI
+    variables:
+      pin:
+        default: 2001-0001-1891
+      port:
+        default: "8443"
+security:
+  - bearerAuth: []
+tags:
+  - name: Api
+  - name: Event
+  - name: Gateway
+  - name: Setup
+  - name: Execution
+paths:
+  /apiVersion:
+    get:
+      tags:
+        - Api
+      summary: Get the api version
+      # No security for this endpoint. We can retrieve api version without authorization.
+      security: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  protocolVersion:
+                    type: string
+              examples:
+                version:
+                  value:
+                    protocolVersion: 2022.1.3-1
+  /events/register:
+    post:
+      tags:
+        - Event
+      summary: Register an event listener
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    $ref: "#/components/schemas/ListenerId"
+  /events/{listenerId}/fetch:
+    post:
+      tags:
+        - Event
+      summary: Fetch events
+      description: Fetch events available after registration and from previous fetch.
+      parameters:
+        - $ref: "#/components/parameters/listenerId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Event"
+  /events/{listenerId}/unregister:
+    post:
+      tags:
+        - Event
+      summary: Unregister an event listener
+      parameters:
+        - $ref: "#/components/parameters/listenerId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {}
+  /setup:
+    get:
+      tags:
+        - Setup
+      description: Get all data about the user setup.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Setup"
+  /setup/gateways:
+    get:
+      tags:
+        - Gateway
+      summary: Get the gateway description
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Gateway"
+              examples:
+                gateway:
+                  value:
+                    - gatewayId: 2001-1234-5678
+                      connectivity:
+                        status: OK
+                        protocolVersion: 2022.1.3-1
+  /setup/devices:
+    get:
+      tags:
+        - Setup
+      summary: Get devices
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Device"
+  /setup/devices/{deviceURL}:
+    get:
+      tags:
+        - Setup
+      summary: Get device
+      parameters:
+        - $ref: "#/components/parameters/deviceURL"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Device"
+  /setup/devices/{deviceURL}/states:
+    get:
+      tags:
+        - Setup
+      summary: Get device states
+      parameters:
+        - $ref: "#/components/parameters/deviceURL"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/State"
+  /setup/devices/{deviceURL}/states/{name}:
+    get:
+      tags:
+        - Setup
+      summary: Get device state
+      parameters:
+        - $ref: "#/components/parameters/deviceURL"
+        - name: name
+          in: path
+          description: The name of the state.
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/State"
+  /setup/devices/controllables/{controllableName}:
+    get:
+      tags:
+        - Setup
+      summary: Get devices with controllables
+      description: Get all devices urls which have that controllable name
+      parameters:
+        - name: controllableName
+          in: path
+          description: New device label.
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DeviceURL"
+  /exec/apply:
+    post:
+      tags:
+        - Execution
+      summary: Execute action group
+      description: Execute a non-persistent action group.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                label:
+                  type: string
+                action:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      deviceURL:
+                        $ref: "#/components/schemas/DeviceURL"
+                      #TODO: finish
+      responses:
+        "200":
+          $ref: "#/components/responses/ExecutionId"
+  /exec/current/{executionId}:
+    get:
+      tags:
+        - Execution
+      summary: Get current execution
+      description: Get an action group execution currently running and launched from the local API.
+      parameters:
+        - $ref: "#/components/parameters/executionId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Action"
+  /exec/current:
+    get:
+      tags:
+        - Execution
+      summary: Get current executions
+      description: Get action groups executions currently running and launched from the local API.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Action"
+  /exec/current/setup:
+    delete:
+      tags:
+        - Execution
+      summary: Cancel all executions
+      description: Cancel all running setup-level executions launched from the local API.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+  /exec/current/setup/{executionId}:
+    delete:
+      tags:
+        - Execution
+      summary: Cancel a specific execution
+      description: Cancel a running setup-level execution launched from the local API.
+      parameters:
+        - $ref: "#/components/parameters/executionId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  parameters:
+    deviceURL:
+      name: deviceURL
+      in: path
+      description: Device URL.
+      required: true
+      schema:
+        $ref: "#/components/schemas/DeviceURL"
+    executionId:
+      name: executionId
+      in: path
+      description: Execution identifier.
+      required: true
+      schema:
+        $ref: "#/components/schemas/ExecutionId"
+    gatewayId:
+      name: gatewayId
+      in: path
+      description: Gateway identifier.
+      required: true
+      schema:
+        $ref: "#/components/schemas/GatewayId"
+    listenerId:
+      name: listenerId
+      in: path
+      description: Listener identifier.
+      required: true
+      schema:
+        $ref: "#/components/schemas/ListenerId"
+    protocolType:
+      name: protocolType
+      in: path
+      description: Protocol identifier.
+      required: true
+      schema:
+        type: integer
+        minimum: 0
+  responses:
+    ExecutionId:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              execId:
+                $ref: "#/components/schemas/ExecutionId"
+  schemas:
+    Action:
+      type: object
+      properties:
+        owner:
+          type: string
+        id:
+          $ref: "#/components/schemas/ExecutionId"
+        executionType:
+          type: string
+          enum:
+            - Immediate execution
+        executionSubType:
+          type: string
+          enum:
+            - MANUAL_CONTROL
+        description:
+          type: string
+        startTime:
+          type: integer
+        actionGroup:
+          type: object
+          properties:
+            label:
+              type: string
+            actions:
+              type: array
+              items:
+                type: object
+                properties:
+                  commands:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: integer
+                        name:
+                          type: string
+                        parameters:
+                          type: array
+                          items: {}
+                  deviceURL:
+                    $ref: "#/components/schemas/DeviceURL"
+        state:
+          type: string
+          enum:
+            - INITIALIZED
+            - TRANSMITTED
+            - IN_PROGRESS
+            - COMPLETED
+            - FAILED
+            - QUEUED_GATEWAY_SIDE
+    Attribute:
+      $ref: "#/components/schemas/State"
+    Device:
+      type: object
+      properties:
+        deviceURL:
+          $ref: "#/components/schemas/DeviceURL"
+        subsystemId:
+          type: integer
+        available:
+          type: boolean
+        type:
+          type: integer
+        label:
+          type: string
+        synced:
+          type: boolean
+        states:
+          type: array
+          items:
+            $ref: "#/components/schemas/State"
+        attributes:
+          type: array
+          items:
+            $ref: "#/components/schemas/Attribute"
+        enabled:
+          type: boolean
+        controllableName:
+          type: string
+        definition:
+          type: object
+          properties:
+            states:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+            widgetName:
+              type: string
+            type:
+              type: string
+            commands:
+              type: array
+              items:
+                type: object
+                properties:
+                  commandName:
+                    type: string
+                  nparams:
+                    type: integer
+                    minimum: 0
+            uiClass:
+              type: string
+              
+        creationTime:
+          type: number
+    Event:
+      oneOf:
+        - type: object
+          properties:
+            name:
+              type: string
+              enum:
+               - ExecutionStateChangedEvent
+        - type: object
+          properties:
+            name:
+              type: string
+              enum:
+               - CommandExecutionStateChangedEvent
+        - type: object
+          properties:
+            name:
+              type: string
+              enum:
+               - DeviceStateChangedEvent
+        - type: object
+          properties:
+            name:
+              type: string
+              enum:
+               - DeviceCreatedEvent
+        - type: object
+          properties:
+            name:
+              type: string
+              enum:
+               - DeviceRemovedEvent
+        - type: object
+          properties:
+            name:
+              type: string
+              enum:
+               - DeviceUnavailableEvent
+        - type: object
+          properties:
+            name:
+              type: string
+              enum:
+               - DeviceAvailableEvent
+        - type: object
+          properties:
+            name:
+              type: string
+              enum:
+               - DeviceUpdatedEvent
+        - type: object
+          properties:
+            name:
+              type: string
+              enum:
+               - DeviceProtocolAvailableEvent
+            protocolType:
+              type: integer
+        - type: object
+          properties:
+            name:
+              type: string
+              enum:
+               - DeviceProtocolUnavailableEvent
+            protocolType:
+              type: integer
+    Execution:
+      type: object
+      properties:
+        state:
+          type: string
+          enum:
+            - INITIALIZED
+            - TRANSMITTED
+            - IN_PROGRESS
+            - COMPLETED
+            - FAILED
+            - QUEUED_GATEWAY_SIDE
+        id:
+          $ref: "#/components/schemas/ExecutionId"
+        source:
+          type: string
+          enum:
+            - local
+        eventTime:
+          description: creation time (timestamp in ms)
+          type: integer
+          minimum: 0
+        detail:
+          type: string
+          description: error details
+        label:
+          type: string
+        type:
+          type: string
+          enum:
+            - Immediate execution - MANUAL_CONTROL
+        executionSubType:
+          type: string
+          enum:
+            - MANUAL_CONTROL
+        executionType:
+          type: string
+          enum:
+            - Immediate execution
+        effectiveStartTime:
+          description: Start time (timestamp in ms)
+          type: integer
+          minimum: 0
+        endTime:
+          description: End time (timestamp in ms)
+          type: integer
+          minimum: 0
+        duration:
+          description: Total duration in ms
+          type: integer
+          minimum: 0
+        commands:
+          type: array
+          items:
+            type: object
+            #TODO: properties:
+        failureType:
+          type: string
+    ExecutionId:
+      type: string
+      format: uuid
+    DeviceURL:
+      type: string
+    Gateway:
+      type: object
+      properties:
+        gatewayId:
+          $ref: "#/components/schemas/GatewayId"
+        connectivity:
+          type: object
+          properties:
+            status:
+              type: string
+            protocolVersion:
+              type: string
+    GatewayId:
+      type: string
+      example: 2001-1234-5678
+    ListenerId:
+      type: string
+      format: uuid
+    Setup:
+      type: object
+      properties:
+        gateways:
+          type: array
+          items:
+            $ref: "#/components/schemas/Gateway"
+        devices:
+          type: array
+          items:
+            $ref: "#/components/schemas/Device"
+    State:
+      oneOf:
+        - type: object
+          properties:
+            name:
+              type: string
+          required:
+            - name
+          additionalProperties: false
+        - type: object
+          properties:
+            type:
+              type: integer
+              enum:
+                - 3
+            name:
+              type: string
+            value:
+              type: string
+          required:
+            - name
+            - type
+            - value
+        - type: object
+          properties:
+            type:
+              type: integer
+              enum:
+                - 1
+                - 2
+            name:
+              type: string
+            value:
+              type: number
+          required:
+            - name
+            - type
+            - value
+        - type: object
+          properties:
+            type:
+              type: integer
+              enum:
+                - 6
+            name:
+              type: string
+            value:
+              type: boolean
+          required:
+            - name
+            - type
+            - value
+        - type: object
+          properties:
+            type:
+              type: integer
+              enum:
+                - 11
+            name:
+              type: string
+            value:
+              type: object
+          required:
+            - name
+            - type
+            - value
+        - type: object
+          properties:
+            type:
+              type: integer
+              enum:
+                - 10
+            name:
+              type: string
+            value:
+              type: array
+              items: {}
+          required:
+            - name
+            - type
+            - value
