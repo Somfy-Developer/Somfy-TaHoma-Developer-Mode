@@ -115,3 +115,15 @@ You are now ready to use this local API.
 
 Get api details by reading the specification in doc/openapi.yaml
 or browse and try it online using swagger-ui: https://somfy-developer.github.io/Somfy-TaHoma-Developer-Mode/
+
+# Rate limits
+
+There is no rate limiting on this local API. However, be aware that, if you calls the API too frequently,
+the gateway might be overloaded which will result in an unwanted latency during products control.
+
+We advise you to call the required API endpoint when your application start and use events to get future change.
+
+For exemple:
+ - Call `/setup` at application start
+ - Register event listener with `/events/register`
+ - Fetch events on `/events/{listenerId}/fetch` once every second at the most
