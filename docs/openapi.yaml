@@ -44,6 +44,12 @@ paths:
       tags:
         - Event
       summary: Register an event listener
+      description: |
+        Register an event listener. The listener will be automaticaly destroyed after 10min of inactivity.
+
+        It can be kept alive indefinitely by fetching events periodicaly.
+
+        Listeners are also destroyed if the gateway reboot. 
       responses:
         "200":
           description: OK
