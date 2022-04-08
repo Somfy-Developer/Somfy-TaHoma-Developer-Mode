@@ -15,6 +15,8 @@ In order to use this now available local API, you need to negociate a token with
 
 ```{{url}}``` to be used is **ha101-1.overkiz.com**
 
+```{{pod}}``` The pin of your gateway (eg. 1234-5678-9012)
+
 ### Login
 When succeeding, the response to this call will include a JSESSIONID cookie that needs to be used whith the other calls to our backend to be authenticated.
 
