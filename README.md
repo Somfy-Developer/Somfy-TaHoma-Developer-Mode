@@ -75,6 +75,36 @@ Use your personal label to identify your tokens.
 }
 ```
 
+---
+
+### Get available tokens
+#### Method: GET
+>```
+>https://{{url}}/enduser-mobile-web/enduserAPI/config/{{pod}}/local/tokens/devmode
+>```
+#### Headers
+
+|Key|Value|
+|---|---|
+|Content-Type|application/json|
+|Cookie|JSESSIONID=THE_VALUE_YOU_GOT_FROM_THE_LOGIN|
+
+
+---
+
+### Delete a token
+#### Method: DELETE
+>```
+>https://{{url}}/enduser-mobile-web/enduserAPI/config/{{pod}}/local/tokens/{uuid}
+>```
+#### Headers
+
+|Key|Value|
+|---|---|
+|Content-Type|application/json|
+|Cookie|JSESSIONID=THE_VALUE_YOU_GOT_FROM_THE_LOGIN|
+
+
 # Security
 
 ## TLS certificate
