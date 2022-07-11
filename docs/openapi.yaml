@@ -45,11 +45,11 @@ paths:
         - Event
       summary: Register an event listener
       description: |
-        Register an event listener. The listener will be automaticaly destroyed after 10min of inactivity.
+        Register an event listener. The listener will be automatically destroyed after 10min of inactivity.
 
-        It can be kept alive indefinitely by fetching events periodicaly.
+        It can be kept alive indefinitely by fetching events periodically.
 
-        Listeners are also destroyed if the gateway reboot. 
+        Listeners are also destroyed if the gateway reboots.
       responses:
         "200":
           description: OK
@@ -256,7 +256,7 @@ paths:
       tags:
         - Execution
       summary: Get current executions
-      description: Get action groups executions currently running and launched from the local API.
+      description: Get action group executions currently running and launched from the local API.
       responses:
         "200":
           description: OK
@@ -454,7 +454,7 @@ components:
                     minimum: 0
             uiClass:
               type: string
-              
+
         creationTime:
           type: number
     Event:
@@ -464,55 +464,55 @@ components:
             name:
               type: string
               enum:
-               - ExecutionStateChangedEvent
+                - ExecutionStateChangedEvent
         - type: object
           properties:
             name:
               type: string
               enum:
-               - CommandExecutionStateChangedEvent
+                - CommandExecutionStateChangedEvent
         - type: object
           properties:
             name:
               type: string
               enum:
-               - DeviceStateChangedEvent
+                - DeviceStateChangedEvent
         - type: object
           properties:
             name:
               type: string
               enum:
-               - DeviceCreatedEvent
+                - DeviceCreatedEvent
         - type: object
           properties:
             name:
               type: string
               enum:
-               - DeviceRemovedEvent
+                - DeviceRemovedEvent
         - type: object
           properties:
             name:
               type: string
               enum:
-               - DeviceUnavailableEvent
+                - DeviceUnavailableEvent
         - type: object
           properties:
             name:
               type: string
               enum:
-               - DeviceAvailableEvent
+                - DeviceAvailableEvent
         - type: object
           properties:
             name:
               type: string
               enum:
-               - DeviceUpdatedEvent
+                - DeviceUpdatedEvent
         - type: object
           properties:
             name:
               type: string
               enum:
-               - DeviceProtocolAvailableEvent
+                - DeviceProtocolAvailableEvent
             protocolType:
               type: integer
         - type: object
@@ -520,7 +520,7 @@ components:
             name:
               type: string
               enum:
-               - DeviceProtocolUnavailableEvent
+                - DeviceProtocolUnavailableEvent
             protocolType:
               type: integer
     Execution:
