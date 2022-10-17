@@ -235,13 +235,10 @@ paths:
                         items:
                           type: object
                           properties:
-                            type:
-                              type: integer
                             name:
                               type: string
                             parameters:
                               type: array
-                              items: {integer}
                       deviceURL:
                         $ref: "#/components/schemas/DeviceURL"
                       #TODO: finish
