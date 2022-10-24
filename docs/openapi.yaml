@@ -239,9 +239,16 @@ paths:
                               type: string
                             parameters:
                               type: array
+                              items: {}
+                          required:
+                            - name
                       deviceURL:
                         $ref: "#/components/schemas/DeviceURL"
-                      #TODO: finish
+                    required:
+                      - deviceURL
+                      - commands
+              required:
+                - actions  
       responses:
         "200":
           $ref: "#/components/responses/ExecutionId"
