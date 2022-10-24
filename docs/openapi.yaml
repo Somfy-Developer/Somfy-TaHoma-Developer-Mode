@@ -77,6 +77,17 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Event"
+        "400":
+          description: An error occurred
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  errorCode:
+                    type: string
   /events/{listenerId}/unregister:
     post:
       tags:
