@@ -225,11 +225,20 @@ paths:
               properties:
                 label:
                   type: string
-                action:
+                actions:
                   type: array
                   items:
                     type: object
                     properties:
+                      commands:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                            parameters:
+                              type: array
                       deviceURL:
                         $ref: "#/components/schemas/DeviceURL"
                       #TODO: finish
