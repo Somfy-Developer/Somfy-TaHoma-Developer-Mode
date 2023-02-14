@@ -161,7 +161,7 @@ TXT:
 You are now ready to use this local API.
 
 Get API details by reading the specification in [`docs/openapi.yaml`](docs/openapi.yaml)
-or browse and try it online using swagger-ui: `https://somfy-developer.github.io/Somfy-TaHoma-Developer-Mode/`
+or browse and try it online using [`swagger-ui`](https://somfy-developer.github.io/Somfy-TaHoma-Developer-Mode).
 
 # Rate limits
 
