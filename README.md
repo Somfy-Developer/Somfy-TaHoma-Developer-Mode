@@ -11,7 +11,7 @@ Activating this mode will enable a local API on your TaHoma box. Be aware that S
 
 In order to use this now available local API, you need to negotiate a token with our cloud API to authenticate your calls to the local API.
 
-`{{url}}` to be used is **ha101-1.overkiz.com**
+`{{url}}` to be used is **ha101-1.overkiz.com** (Europe, Middle East and Africa), **ha201-1.overkiz.com** (Asia and Pacific) or **ha401-1.overkiz.com** (North America)
 
 `{{pod}}` The pin of your gateway (eg. 1234-5678-9012)
 
