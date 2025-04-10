@@ -2,130 +2,23 @@
 
 ## Getting started
 
-First connect to the Somfy website and navigate to the 👨 **My Account** menu.  
-Find the different available options for your TaHoma box and activate **Developer Mode**.
+1. Open the **TaHoma By Somfy** application on your device 📱.
+2. Navigate to the **Advanced Functions** menu in the application.
+3. Activate **Developer Mode** by tapping 👇 7 times on the version number of your gateway (like 2025.1.4-11).
 
-Activating this mode will enable a local API on your TaHoma box. Be aware that Somfy will not be able to provide support for usage of this API.
+By completing these steps, you enable the local API on your TaHoma box 🚀. 
 
-## API authentication
-
-In order to use this now available local API, you need to negotiate a token with our cloud API to authenticate your calls to the local API.
-
-`{{url}}` to be used is:
-- **ha101-1.overkiz.com** (Europe, Middle East and Africa)
-- **ha201-1.overkiz.com** (Asia and Pacific)
-- **ha401-1.overkiz.com** (North America)
-
-`{{pod}}` The pin of your gateway (eg. 1234-5678-9012)
-
-### Login
-
-When succeeding, the response to this call will include a `JSESSIONID` cookie that needs to be used with the other calls to our backend to be authenticated.
-
-#### Method: POST
-
-> ```
-> https://{{url}}/enduser-mobile-web/enduserAPI/login
-> ```
-
-#### Headers
-
-| Key          | Value                             |
-| ------------ | --------------------------------- |
-| Content-Type | application/x-www-form-urlencoded |
-
-#### Body (**x-www-form-urlencoded**)
-
-| Key          | Value              |
-| ------------ | ------------------ |
-| userId       | YOUR_EMAIL_ADDRESS |
-| userPassword | YOUR_PASSWORD      |
-
----
-
-### Generate a token
-
-#### Method: GET
-
-> ```
-> https://{{url}}/enduser-mobile-web/enduserAPI/config/{{pod}}/local/tokens/generate
-> ```
-
-#### Headers
-
-| Key          | Value                                         |
-| ------------ | --------------------------------------------- |
-| Content-Type | `application/json`                            |
-| Cookie       | `JSESSIONID=THE_VALUE_YOU_GOT_FROM_THE_LOGIN` |
-
----
-
-### Activate your token
-
-Use your personal label to identify your tokens.
-
-#### Method: POST
-
-> ```
-> https://{{url}}/enduser-mobile-web/enduserAPI/config/{{pod}}/local/tokens
-> ```
-
-#### Headers
-
-| Key          | Value                                         |
-| ------------ | --------------------------------------------- |
-| Content-Type | `application/json`                            |
-| Cookie       | `JSESSIONID=THE_VALUE_YOU_GOT_FROM_THE_LOGIN` |
-
-#### Body (**raw**)
-
-```json
-{
-  "label": "Toto token",
-  "token": "{{token}}",
-  "scope": "devmode"
-}
-```
-
----
-
-### Get available tokens
-
-#### Method: GET
-
-> ```
-> https://{{url}}/enduser-mobile-web/enduserAPI/config/{{pod}}/local/tokens/devmode
-> ```
-
-#### Headers
-
-| Key          | Value                                         |
-| ------------ | --------------------------------------------- |
-| Content-Type | `application/json`                            |
-| Cookie       | `JSESSIONID=THE_VALUE_YOU_GOT_FROM_THE_LOGIN` |
-
----
-
-### Delete a token
-
-#### Method: DELETE
-
-> ```
-> https://{{url}}/enduser-mobile-web/enduserAPI/config/{{pod}}/local/tokens/{uuid}
-> ```
-
-#### Headers
-
-| Key          | Value                                         |
-| ------------ | --------------------------------------------- |
-| Content-Type | `application/json`                            |
-| Cookie       | `JSESSIONID=THE_VALUE_YOU_GOT_FROM_THE_LOGIN` |
+4. Generate a token from the **Developer Mode** menu to authenticate your API calls.
+  
+> [!NOTE]
+> Multiple tokens can be generated, but keep in mind that they can only be 👀 read and copied at the time of their creation. Ensure you save them securely for future use.
 
 # Security
 
 ## TLS certificate
 
-⚠ Due to the local nature of the API, the TaHoma box uses a certificate signed by a self signed authority.
+> [!WARNING]
+> Due to the local nature of the API, the TaHoma box uses a certificate signed by a self signed authority.
 
 To avoid security issues, add the following authority to your HTTPS client trust store:
 `https://ca.overkiz.com/overkiz-root-ca-2048.crt`
@@ -140,7 +33,6 @@ Simply add the **Authorization** header when making request.
 ```
 Authorization: Bearer <token>
 ```
-
 # Discovery
 
 You can find your TaHoma box on the local network using the mDNS protocol.
@@ -157,7 +49,9 @@ TXT:
 | api_version | Version of the available REST API (eg. 1)     |
 | fw_version  | Firmware version of the TaHoma (eg. 2019.4.3) |
 
-⚠ Host name and service name are not a reliable way to identify a TaHoma by its pin. The TXT record `gateway_pin` has to match.
+
+> [!WARNING]
+> Host name and service name are not a reliable way to identify a TaHoma by its pin. The TXT record `gateway_pin` has to match.
 
 # API Documentation
 
@@ -178,3 +72,9 @@ For example:
 - Call `/setup` at application start
 - Register event listener with `/events/register`
 - Fetch events on `/events/{listenerId}/fetch` once every second at most
+
+
+> [!CAUTION]
+> Our support teams are available if you have any problems or questions regarding the use or operation of the TaHoma system.
+> 
+> However, for questions related to the development of third-party software using this API, please refer to this gitHub project
