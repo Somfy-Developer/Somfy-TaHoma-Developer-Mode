@@ -8,7 +8,11 @@
 
 By completing these steps, you enable the local API on your TaHoma box 🚀. 
 
+![Developer Mode](img/Key visuals developer mode 1.png)
+
 4. Generate a token from the **Developer Mode** menu to authenticate your API calls.
+
+![Token](img/Key visuals developer mode 2.png)
   
 > [!NOTE]
 > Multiple tokens can be generated, but keep in mind that they can only be 👀 read and copied at the time of their creation. Ensure you save them securely for future use.
