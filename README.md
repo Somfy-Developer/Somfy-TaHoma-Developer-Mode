@@ -3,8 +3,8 @@
 ## Getting started
 
 1. Open the **TaHoma By Somfy** application on your device 📱.
-2. Navigate to the **Help & advanced features** ▶️ **Advanced features** menu in the application.
-3. Activate **Developer Mode** by tapping 👇 7 times on the version number of your gateway (like 2025.1.4-11).
+2. Navigate to the **Configure the installation** ▶️ **Access the parameters** of your TaHoma box in the application.
+3. Activate **Developer Mode** by tapping 👇 7 times on the PIN of your gateway (like 2001-1234-5678).
 
 By completing these steps, you enable the local API on your TaHoma box 🚀. 
 
