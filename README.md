@@ -82,3 +82,11 @@ For example:
 > Our support teams are available if you have any problems or questions regarding the use or operation of the TaHoma system.
 > 
 > However, for questions related to the development of third-party software using this API, please refer to this gitHub project
+
+# Supported gateways
+
+The TaHoma app supports different types of gateways. The TaHoma Developer Mode is compatible with the large majority of them excluding :
+- TaHoma box or Somfy box (1st generation, square shape)
+- Connectivity Kit
+
+
