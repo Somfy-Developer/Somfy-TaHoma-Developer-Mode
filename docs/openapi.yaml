@@ -659,8 +659,12 @@ components:
                 - 3
             name:
               type: string
+            # Nominally a string, but some devices (e.g. Zigbee sensors
+            # reporting core:ManufacturerId) send a bare number under type 3.
             value:
-              type: string
+              oneOf:
+                - type: string
+                - type: number
           required:
             - name
             - type
